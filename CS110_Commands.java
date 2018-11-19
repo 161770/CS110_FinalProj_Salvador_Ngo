@@ -9,21 +9,38 @@
  * @author student
  */
 import java.util.*;
-public class CS110_Project_Montoya_Patajo_Salvador_Commands {
-    public static void main(String[] args){
+import java.io.File;
+import java.io.RandomAccessFile; 
+import java.io.*; 
+
+public class CS110_Commands {
+    public static void main(String args[]) throws FileNotFoundException {
+        
+        RandomAccessFile raf1 = new RandomAccessFile(args[0], "rwd"); 
+        RandomAccessFile raf2 = new RandomAccessFile(args[1], "rwd"); 
+        
         Scanner in = new Scanner(System.in);
         String command = in.nextLine();
         String[] com = command.split(" ");
-        if(com[0].equals("insert")) Insert(com[1],com[2]);
+        if(com[0].equals("insert")) Insert(com[1],com[2],raf2);
         else if(com[0].equals("update")) Update(com[1],com[2]);
         else if(com[0].equals("select")) Select(com[1]);
         else if(com[0].equals("exit")) Exit();
         else System.out.println("ERROR: invalid command.");
         
     }
-    public static void Insert(String a, String b){
+    
+    public static void Insert(String a, String b, RandomAccessFile RAF){
         int key = Integer.parseInt(a);
         String val = b;
+        try{
+        RAF.writeByte(val.length());
+        RAF.writeBytes(val);
+        RAF.close();
+        System.out.printf("%s inserted at %d", val,key);
+        }catch(IOException ae){
+            System.out.println("Something happened");
+        }
         
     }
     public static void Update(String a, String b){
